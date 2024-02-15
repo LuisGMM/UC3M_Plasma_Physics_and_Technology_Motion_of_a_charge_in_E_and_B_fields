@@ -5,8 +5,9 @@
 .PHONY: install
 install:
 	: && \
-	virtualenv -p python3 venv && \
+	virtualenv -p python3.10 venv && \
 	. venv/bin/activate && \
 	pip install -r requirements/required.txt && \
 	pip install -r requirements/dev.txt && \
+	echo "../../../../src/" > venv/lib/python3.10/site-packages/lab.pth && \
 	:
