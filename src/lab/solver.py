@@ -13,8 +13,6 @@ def solve(
     gamma_qB: float,
     sgn: Literal[-1, 1],
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    del w
-
     r_current = r0
     v_current = v0
 
@@ -22,14 +20,15 @@ def solve(
     v = np.ones((int(t_final / inc_t), 3))
     t = np.arange(0, t_final, inc_t)
 
-    for i, _ in enumerate(t):
+    for i, t_i in enumerate(t):
         r[i] = r_current
         v[i] = v_current
+        ex_b0 = Ex_B0 * np.cos(2 * np.pi * w * t_i)
 
         v_mid = v_current + 0.5 * inc_t * np.array(
             (
                 sgn * (1 + B1_B0 * r_current[0]) * v_current[1]
-                + sgn * Ex_B0
+                + sgn * ex_b0
                 - gamma_qB * v_current[0],
                 -sgn * (1 + B1_B0 * r_current[0]) * v_current[0]
                 - gamma_qB * v_current[1],
@@ -41,7 +40,7 @@ def solve(
         v_next = v_current + inc_t * np.array(
             (
                 sgn * (1 + B1_B0 * r_mid[0]) * v_mid[1]
-                + sgn * Ex_B0
+                + sgn * ex_b0
                 - gamma_qB * v_mid[0],
                 -sgn * (1 + B1_B0 * r_mid[0]) * v_mid[0] - gamma_qB * v_mid[1],
                 -gamma_qB * v_mid[2],
